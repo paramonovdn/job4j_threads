@@ -8,7 +8,6 @@ package ru.job4j;
  * 3 изменение
  *
  * 3.3. Объединение нескольких коммитов
- * Изменения 2
  */
 public class App {
     public static void main(String[] args) {
