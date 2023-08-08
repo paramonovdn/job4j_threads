@@ -17,33 +17,40 @@ public class Wget implements Runnable {
         this.speed = speed;
     }
 
+
     @Override
     public void run() {
         var startAt = System.currentTimeMillis();
-        var file = new File("tmp.xml");
+        String[] urlParts = url.split("/");
+        var file = new File(urlParts[3] + " " + urlParts[urlParts.length - 1]);
         try (var in = new URL(url).openStream();
              var out = new FileOutputStream(file)) {
             System.out.println("Open connection: " + (System.currentTimeMillis() - startAt) + " ms");
             var dataBuffer = new byte[512];
             int bytesRead;
+            int downloadBytes = 0;
+            double downloadAt = System.nanoTime();
             while ((bytesRead = in.read(dataBuffer, 0, dataBuffer.length)) != -1) {
-                var downloadAt = System.nanoTime();
                 out.write(dataBuffer, 0, bytesRead);
-                double realTime = System.nanoTime() - downloadAt;
-                double realSpeedInMs = dataBuffer.length / realTime * 1000000;
-                if (realSpeedInMs > speed) {
-                    var pause = realSpeedInMs / speed;
-                    Thread.sleep((long) pause);
-                    System.out.println("Read 512 bytes with limited speed : " + (System.nanoTime() - downloadAt) + " nano.");
-                } else {
-                    System.out.println("Read 512 bytes : " + (long) realTime + " nano.");
+                downloadBytes += bytesRead;
+                if (downloadBytes > speed) {
+                    double downloadTimeInMs = (System.nanoTime() - downloadAt) / 1000000;
+                    if (downloadTimeInMs < 1000) {
+                        double pauseInMillis = 1000 - downloadTimeInMs;
+                        Thread.sleep((long) pauseInMillis);
+                        System.out.println("Download " + downloadBytes + " bytes: " + "download time- "
+                                + downloadTimeInMs + " ms, " + "download speed limit- " + speed + " B/s, "
+                                + "pause- " + pauseInMillis + " ms.");
+                        downloadBytes = 0;
+                    }
                 }
+                downloadAt = System.nanoTime();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         try {
-            System.out.println(Files.size(file.toPath()) + " bytes");
+            System.out.println("Total file size- " + Files.size(file.toPath()) + " bytes.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -68,7 +75,7 @@ public class Wget implements Runnable {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException, MalformedURLException, URISyntaxException {
+    public static void main(String[] args) throws InterruptedException {
         argsValid(args);
         String url = args[0];
         int speed = Integer.parseInt(args[1]);
