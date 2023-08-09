@@ -41,10 +41,10 @@ public class Wget implements Runnable {
                         System.out.println("Download " + downloadBytes + " bytes: " + "download time- "
                                 + downloadTimeInMs + " ms, " + "download speed limit- " + speed + " B/s, "
                                 + "pause- " + pauseInMillis + " ms.");
-                        downloadBytes = 0;
                     }
+                    downloadBytes = 0;
+                    downloadAt = System.nanoTime();
                 }
-                downloadAt = System.nanoTime();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
