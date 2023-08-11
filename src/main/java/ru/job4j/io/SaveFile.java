@@ -1,9 +1,6 @@
 package ru.job4j.io;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 public final class SaveFile {
     private final File file;
@@ -13,7 +10,7 @@ public final class SaveFile {
     }
 
     public void saveContent(String content) {
-        try (OutputStream out = new FileOutputStream(file)) {
+        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
             byte[] buffer = content.getBytes();
             out.write(buffer, 0, buffer.length);
         } catch (IOException e) {
