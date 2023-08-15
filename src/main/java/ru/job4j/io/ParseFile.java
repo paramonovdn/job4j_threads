@@ -26,12 +26,10 @@ public final class ParseFile {
     }
 
     public String getContent() {
-        Predicate<Character> filter = character -> true;
-        return content(filter);
+        return content(data -> true);
     }
 
     public String getContentWithoutUnicode() {
-        Predicate<Character> filter = character -> Character.UnicodeBlock.of(character) == Character.UnicodeBlock.BASIC_LATIN;
-        return content(filter);
+        return content(data -> data < 0x80);
     }
 }
