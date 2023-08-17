@@ -8,11 +8,7 @@ public class AccountStorage {
 
     public boolean add(Account account) {
         synchronized (accounts) {
-            boolean result = false;
-            if (accounts.putIfAbsent(account.id(), account) == null) {
-                result = true;
-            }
-            return result;
+            return accounts.putIfAbsent(account.id(), account) == null;
         }
     }
 
@@ -30,19 +26,14 @@ public class AccountStorage {
 
     public Optional<Account> getById(int id) {
         synchronized (accounts) {
-            Optional<Account> result = Optional.empty();
-            Account account = accounts.get(id);
-            if (account != null) {
-                result = Optional.of(account);
-            }
-            return result;
+            return Optional.ofNullable(accounts.get(id));
         }
     }
 
     public boolean transfer(int fromId, int toId, int amount) {
         synchronized (accounts) {
             boolean result = false;
-            if (accounts.containsKey(fromId) && accounts.containsKey(toId) && accounts.get(fromId).amount() >= amount) {
+            if (!getById(fromId).isEmpty() && !getById(toId).isEmpty() && getById(fromId).get().amount() >= amount) {
                 Account fromAccount = new Account(fromId, accounts.get(fromId).amount() - amount);
                 Account toAccount = new Account(toId, accounts.get(toId).amount() + amount);
                 update(fromAccount);
