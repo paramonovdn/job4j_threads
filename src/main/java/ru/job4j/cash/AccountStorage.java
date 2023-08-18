@@ -33,9 +33,11 @@ public class AccountStorage {
     public boolean transfer(int fromId, int toId, int amount) {
         synchronized (accounts) {
             boolean result = false;
-            if (!getById(fromId).isEmpty() && !getById(toId).isEmpty() && getById(fromId).get().amount() >= amount) {
-                Account fromAccount = new Account(fromId, accounts.get(fromId).amount() - amount);
-                Account toAccount = new Account(toId, accounts.get(toId).amount() + amount);
+            Optional<Account> optionalFromAccount = getById(fromId);
+            Optional<Account> optionalToAccount = getById(toId);
+            if (!optionalFromAccount.isEmpty() && !optionalToAccount.isEmpty() && optionalFromAccount.get().amount() >= amount) {
+                Account fromAccount = new Account(fromId, optionalFromAccount.get().amount() - amount);
+                Account toAccount = new Account(toId, optionalToAccount.get().amount() + amount);
                 update(fromAccount);
                 update(toAccount);
                 result = true;
