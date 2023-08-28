@@ -22,20 +22,17 @@ public class SimpleBlockingQueue<T> {
         while (this.queue.size() == this.limit) {
             wait();
         }
-        if (this.queue.size() == 0) {
-            notifyAll();
-        }
         this.queue.add(value);
+        notifyAll();
     }
 
     public synchronized T poll() throws InterruptedException {
         while (this.queue.size() == 0) {
             wait();
         }
-        if (this.queue.size() == this.limit) {
-            notifyAll();
-        }
-        return this.queue.remove();
+        T result = this.queue.poll();
+        notifyAll();
+        return result;
     }
 
     public boolean isEmpty() {
