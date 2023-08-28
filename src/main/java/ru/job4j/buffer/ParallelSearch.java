@@ -4,7 +4,7 @@ public class ParallelSearch {
 
     public static void main(String[] args) {
 
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(100);
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(10);
 
         final Thread producer = new Thread(
                 () -> {
