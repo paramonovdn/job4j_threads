@@ -37,6 +37,6 @@ public class SimpleBlockingQueueTest2 {
         producer.join();
         consumer.interrupt();
         consumer.join();
-        assertThat(buffer).containsExactly(10,9,8,7,6,5,4,3,2,1);
+        assertThat(buffer).containsExactly(10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
     }
 }
