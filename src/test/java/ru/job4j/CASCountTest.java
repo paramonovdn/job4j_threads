@@ -5,28 +5,36 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CASCountTest {
-
     @Test
-    public void whenManyIncrementAndOneGet() {
+    public void whenManyIncrementAndOneGet() throws InterruptedException {
         CASCount count = new CASCount();
-        for (int i = 0; i < 100; i++) {
-            count.increment();
-        }
-        assertThat(count.get()).isEqualTo(100);
-    }
-
-    @Test
-    public void whenSerialIncrementAndThenCheck() {
-        CASCount count = new CASCount();
-        assertThat(count.get()).isEqualTo(0);
-        count.increment();
-        assertThat(count.get()).isEqualTo(1);
-        count.increment();
-        assertThat(count.get()).isEqualTo(2);
-        count.increment();
-        assertThat(count.get()).isEqualTo(3);
-        count.increment();
-        assertThat(count.get()).isEqualTo(4);
-
+        Thread t1 = new Thread(
+                () -> {
+                    for (int i = 0; i < 33; i++) {
+                        count.increment();
+                    }
+                }
+        );
+        Thread t2 = new Thread(
+                () -> {
+                    for (int i = 0; i < 33; i++) {
+                        count.increment();
+                    }
+                }
+        );
+        Thread t3 = new Thread(
+                () -> {
+                    for (int i = 0; i < 33; i++) {
+                        count.increment();
+                    }
+                }
+        );
+        t1.start();
+        t2.start();
+        t3.start();
+        t1.join();
+        t2.join();
+        t3.join();
+        assertThat(count.get()).isEqualTo(99);
     }
 }
