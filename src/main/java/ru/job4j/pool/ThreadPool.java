@@ -12,16 +12,18 @@ public class ThreadPool {
     public ThreadPool() {
         int size = Runtime.getRuntime().availableProcessors();
         for (int i = 0; i < size; i++) {
-            threads.add(new Thread(() -> {
+            Thread thread = new Thread(() -> {
                 try {
                     while (!Thread.currentThread().isInterrupted()) {
-                        tasks.poll();
+                        Runnable task = tasks.poll();
+                        task.run();
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
-            }));
+            });
+            thread.start();
+            threads.add(thread);
         }
     }
 
@@ -33,5 +35,25 @@ public class ThreadPool {
         for (Thread thread : threads) {
             thread.interrupt();
         }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Runnable runnable = () -> {
+            System.out.printf("%s started \n", Thread.currentThread().getName());
+            try {
+                System.out.printf("%s sleep 0.5 seconds \n", Thread.currentThread().getName());
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.printf("%s has been interrupted \n", Thread.currentThread().getName());
+                Thread.currentThread().interrupt();
+            }
+            System.out.printf("%s finished \n", Thread.currentThread().getName());
+        };
+
+        ThreadPool threadPool = new ThreadPool();
+        threadPool.work(runnable);
+        threadPool.work(runnable);
+        threadPool.work(runnable);
+        threadPool.shutdown();
     }
 }
