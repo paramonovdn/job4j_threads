@@ -21,7 +21,7 @@ public class ThreadPool {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-            });
+            }, "Thread №" + i);
             thread.start();
             threads.add(thread);
         }
