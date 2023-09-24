@@ -3,10 +3,6 @@ package ru.job4j.pools;
 import org.junit.jupiter.api.Test;
 import ru.job4j.cache.OptimisticException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -15,21 +11,41 @@ public class IndexParallelSearchTest {
 
     @Test
     public void whenSearchInteger() {
-        Integer[] array = {3, 2, 3, 4, 3};
-        Integer element = 3;
+        Integer[] array = {1, 2, 3, 4, 5};
+        Integer element = 1;
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
-        List<Integer> result = indexParallelSearch.getIndex(array, element);
-        List<Integer> expected = new ArrayList<>(Arrays.asList(0, 2, 4));
+        Integer result = indexParallelSearch.getIndex(array, element);
+        Integer expected = 0;
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenSearchIntegerMoreTenElements() {
+        Integer[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+        Integer element = 25;
+        IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
+        Integer result = indexParallelSearch.getIndex(array, element);
+        Integer expected = 24;
         assertThat(result).isEqualTo(expected);
     }
 
     @Test
     public void whenSearchDouble() {
-        Double[] array = {3.0, 2.0, 3.0, 4.0, 3.0};
-        Double element = 3.0;
+        Double[] array = {1.0, 2.0, 3.0, 4.0, 5.0};
+        Double element = 5.0;
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
-        List<Integer> result = indexParallelSearch.getIndex(array, element);
-        List<Integer> expected = new ArrayList<>(Arrays.asList(0, 2, 4));
+        Integer result = indexParallelSearch.getIndex(array, element);
+        Integer expected = 4;
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenSearchDoubleMoreTenElement() {
+        Double[] array = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0};
+        Double element = 15.0;
+        IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
+        Integer result = indexParallelSearch.getIndex(array, element);
+        Integer expected = 14;
         assertThat(result).isEqualTo(expected);
     }
 
@@ -38,31 +54,10 @@ public class IndexParallelSearchTest {
         Character[] array = {'a', 'b', 'c', 'd', 'e'};
         Character element = 'd';
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
-        List<Integer> result = indexParallelSearch.getIndex(array, element);
-        List<Integer> expected = new ArrayList<>(Arrays.asList(3));
+        Integer result = indexParallelSearch.getIndex(array, element);
+        Integer expected = 3;
         assertThat(result).isEqualTo(expected);
     }
-
-    @Test
-    public void whenSearchBoolean() {
-        Boolean[] array = {true, false, true, false, true};
-        Boolean element = true;
-        IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
-        List<Integer> result = indexParallelSearch.getIndex(array, element);
-        List<Integer> expected = new ArrayList<>(Arrays.asList(0, 2, 4));
-        assertThat(result).isEqualTo(expected);
-    }
-
-    @Test
-    public void whenSearchIntegerMoreTenElements() {
-        Integer[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        Integer element = 9;
-        IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
-        List<Integer> result = indexParallelSearch.getIndex(array, element);
-        List<Integer> expected = new ArrayList<>(Arrays.asList(8, 18));
-        assertThat(result).isEqualTo(expected);
-    }
-
 
     @Test
     public void whenSearchIntegerAndCatchException() {
@@ -76,8 +71,8 @@ public class IndexParallelSearchTest {
 
     @Test
     public void whenSearchIntegerMoreTenElementsAndCatchException() {
-        Integer[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        Integer element = 12;
+        Integer[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+        Integer element = 33;
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
         assertThatThrownBy(() -> indexParallelSearch.getIndex(array, element))
                 .isInstanceOf(OptimisticException.class)
