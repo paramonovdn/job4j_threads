@@ -1,10 +1,8 @@
 package ru.job4j.pools;
 
 import org.junit.jupiter.api.Test;
-import ru.job4j.cache.OptimisticException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 public class IndexParallelSearchTest {
@@ -64,9 +62,9 @@ public class IndexParallelSearchTest {
         Integer[] array = {1, 2, 3};
         Integer element = 4;
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
-        assertThatThrownBy(() -> indexParallelSearch.getIndex(array, element))
-                .isInstanceOf(OptimisticException.class)
-                .hasMessageContaining("Element not found");
+        Integer result = indexParallelSearch.getIndex(array, element);
+        Integer expected = null;
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
@@ -74,10 +72,8 @@ public class IndexParallelSearchTest {
         Integer[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
         Integer element = 33;
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
-        assertThatThrownBy(() -> indexParallelSearch.getIndex(array, element))
-                .isInstanceOf(OptimisticException.class)
-                .hasMessageContaining("Element not found");
+        Integer result = indexParallelSearch.getIndex(array, element);
+        Integer expected = null;
+        assertThat(result).isEqualTo(expected);
     }
-
-
 }
