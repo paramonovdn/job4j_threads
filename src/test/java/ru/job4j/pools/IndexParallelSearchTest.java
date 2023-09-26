@@ -63,7 +63,7 @@ public class IndexParallelSearchTest {
         Integer element = 4;
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
         Integer result = indexParallelSearch.getIndex(array, element);
-        Integer expected = null;
+        Integer expected = -1;
         assertThat(result).isEqualTo(expected);
     }
 
@@ -73,7 +73,7 @@ public class IndexParallelSearchTest {
         Integer element = 33;
         IndexParallelSearch indexParallelSearch = new IndexParallelSearch(array, 0, array.length - 1, element);
         Integer result = indexParallelSearch.getIndex(array, element);
-        Integer expected = null;
+        Integer expected = -1;
         assertThat(result).isEqualTo(expected);
     }
 }

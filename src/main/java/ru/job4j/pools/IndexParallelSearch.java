@@ -4,10 +4,11 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 public class IndexParallelSearch<T> extends RecursiveTask<Integer> {
+
     private final T[] array;
     private final int from;
     private final int to;
-    private T element;
+    private final T element;
 
     public IndexParallelSearch(T[] array, int from, int to, T element) {
         this.array = array;
@@ -19,18 +20,20 @@ public class IndexParallelSearch<T> extends RecursiveTask<Integer> {
     @Override
     protected Integer compute() {
         if ((to - from) < 10) {
-            return linearSearchIndex(array, from, to);
+            return linearSearchIndex();
         }
         int mid = (from + to) / 2;
         IndexParallelSearch leftSearch = new IndexParallelSearch(array, from, mid, element);
         IndexParallelSearch rightSearch = new IndexParallelSearch(array, mid + 1, to, element);
         leftSearch.fork();
         rightSearch.fork();
-        return (Integer) leftSearch.join() + (Integer) rightSearch.join();
+        Integer left = (Integer) leftSearch.join();
+        Integer right = (Integer) rightSearch.join();
+        return left & right;
     }
 
-    public Integer linearSearchIndex(T[] array, int from, int to) {
-        Integer result = 0;
+    public Integer linearSearchIndex() {
+        Integer result = -1;
         for (int i = from; i <= to; i++) {
             if (array[i].equals(element)) {
                 result = i;
@@ -40,9 +43,9 @@ public class IndexParallelSearch<T> extends RecursiveTask<Integer> {
         return result;
     }
 
-    public Integer getIndex(T[] array, T element) {
+    public static <T> Integer getIndex(T[] array, T element) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Integer result = (Integer) forkJoinPool.invoke(new IndexParallelSearch(array, 0, array.length - 1, element));
-        return result == 0 && !array[0].equals(element) ? null : result;
+        return result;
     }
 }
