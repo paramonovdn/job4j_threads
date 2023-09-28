@@ -29,7 +29,7 @@ public class IndexParallelSearch<T> extends RecursiveTask<Integer> {
         rightSearch.fork();
         Integer left = (Integer) leftSearch.join();
         Integer right = (Integer) rightSearch.join();
-        return left & right;
+        return Math.max(left, right);
     }
 
     public Integer linearSearchIndex() {
