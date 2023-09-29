@@ -17,24 +17,12 @@ public class RolColSumTest {
                         {4, 3, 6},
                         {7, 8, 9}
                 };
-        int colSum0 = sum(array)[0].getColSum();
-        int colSum1 = sum(array)[1].getColSum();
-        int colSum2 = sum(array)[2].getColSum();
-        int rowSum0 = sum(array)[0].getRowSum();
-        int rowSum1 = sum(array)[1].getRowSum();
-        int rowSum2 = sum(array)[2].getRowSum();
-        Integer expectedRowSum0 = 6;
-        Integer expectedRowSum1 = 13;
-        Integer expectedRowSum2 = 24;
-        Integer expectedColSum0 = 12;
-        Integer expectedColSum1 = 13;
-        Integer expectedColSum2 = 18;
-        assertThat(colSum0).isEqualTo(expectedColSum0);
-        assertThat(colSum1).isEqualTo(expectedColSum1);
-        assertThat(colSum2).isEqualTo(expectedColSum2);
-        assertThat(rowSum0).isEqualTo(expectedRowSum0);
-        assertThat(rowSum1).isEqualTo(expectedRowSum1);
-        assertThat(rowSum2).isEqualTo(expectedRowSum2);
+        Sums[] expected = {
+                new Sums(6, 12),
+                new Sums(13, 13),
+                new Sums(24, 18)
+        };
+        assertThat(sum(array)).isEqualTo(expected);
     }
 
     @Test
@@ -45,23 +33,11 @@ public class RolColSumTest {
                         {4, 3, 6},
                         {7, 8, 9}
                 };
-        int colSum0 = asyncSum(array)[0].getColSum();
-        int colSum1 = asyncSum(array)[1].getColSum();
-        int colSum2 = asyncSum(array)[2].getColSum();
-        int rowSum0 = asyncSum(array)[0].getRowSum();
-        int rowSum1 = asyncSum(array)[1].getRowSum();
-        int rowSum2 = asyncSum(array)[2].getRowSum();
-        Integer expectedRowSum0 = 6;
-        Integer expectedRowSum1 = 13;
-        Integer expectedRowSum2 = 24;
-        Integer expectedColSum0 = 12;
-        Integer expectedColSum1 = 13;
-        Integer expectedColSum2 = 18;
-        assertThat(colSum0).isEqualTo(expectedColSum0);
-        assertThat(colSum1).isEqualTo(expectedColSum1);
-        assertThat(colSum2).isEqualTo(expectedColSum2);
-        assertThat(rowSum0).isEqualTo(expectedRowSum0);
-        assertThat(rowSum1).isEqualTo(expectedRowSum1);
-        assertThat(rowSum2).isEqualTo(expectedRowSum2);
+        Sums[] expected = {
+                new Sums(6, 12),
+                new Sums(13, 13),
+                new Sums(24, 18)
+        };
+        assertThat(asyncSum(array)).isEqualTo(expected);
     }
 }
